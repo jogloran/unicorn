@@ -62,6 +62,7 @@ Here are some cool community projects and resources that you might find useful /
 - :link: [Unicorn Clock](https://github.com/hugokernel/UnicornClock)
 - :link: [Unicorn Weather Station](https://github.com/TagWolf/UnicornWeatherStation)
 - :link: [Unicorn News/RSS Feed Display](https://github.com/TagWolf/UnicornRSSDisplay)
+- :link: [Galactic Unicorn Flight Tracker](https://github.com/steco/flight-tracker)
 
 ### Cosmic
 - :link: [Green Energy Display with Cosmic Unicorn](https://www.hackster.io/andreas-motzek/clock-and-green-energy-display-with-cosmic-unicorn-641dcb)
