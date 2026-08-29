@@ -13,6 +13,7 @@ freeze("$(MPY_DIR)/../pimoroni-pico/micropython/modules_py", "pimoroni.py")
 freeze("$(MPY_DIR)/../pimoroni-pico/micropython/modules_py", "boot.py")
 freeze("$(MPY_DIR)/../pimoroni-pico/micropython/modules_py", "lte.py")
 
+freeze("../modules/common")
 freeze("../modules/wireless")
 
 freeze("$(BOARD_DIR)", "version.py")
