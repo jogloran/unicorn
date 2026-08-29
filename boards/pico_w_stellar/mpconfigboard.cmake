@@ -6,6 +6,10 @@ set(UNICORN "stellar")
 # The C malloc is needed by cyw43-driver Bluetooth and Pimoroni Pico modules
 set(MICROPY_C_HEAP_SIZE 4096)
 
+if(NOT DEFINED MICROPY_HW_FLASH_STORAGE_BYTES)
+    set(MICROPY_HW_FLASH_STORAGE_BYTES 868352)  # PICO_FLASH_SIZE_BYTES - (1200 * 1024), of 2MB
+endif()
+
 set(MICROPY_PY_LWIP ON)
 set(MICROPY_PY_NETWORK_CYW43 ON)
 

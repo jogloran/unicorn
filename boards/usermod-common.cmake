@@ -42,21 +42,6 @@ include(${UNICORN}_unicorn/micropython)
 include(micropython-common-ulab)
 enable_ulab()
 
-# These do not fit on the 2MB RP2040 Pico W
-if(PICO_PLATFORM EQUAL "rp2350-arm-s")
-# LEDs & Matrices
-include(plasma/micropython)
-
-# Servos & Motors
-include(pwm/micropython)
-include(servo/micropython)
-include(encoder/micropython)
-include(motor/micropython)
-endif()
-
-# Still required for version.py
-include(modules_py/modules_py)
-
 # C++ Magic Memory
 include(cppmem/micropython)
 
