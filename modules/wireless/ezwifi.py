@@ -1,5 +1,6 @@
-import network
 import asyncio
+
+import network
 from micropython import const
 
 
@@ -19,6 +20,8 @@ class EzWiFi:
 
         self._verbose = get("verbose", False)
 
+        self._spce = get("spce", False)
+
         self._events = {
             "connected": get("connected", None),
             "failed": get("failed", None),
@@ -26,6 +29,18 @@ class EzWiFi:
             "warning": get("warning", None),
             "error": get("error", None)
         }
+
+        if self._spce:
+            # Use the SP/CE pins for this board
+            wifi_config = {"pin_on": 8, "pin_dat": 11, "pin_clock": 10, "pin_cs": 9}
+        else:
+            # Try to get custom pins and PIO clock divisor from kwargs
+            wifi_config = {key: kwargs[key] for key in kwargs if key.startswith(("pin_", "div_"))}
+
+        if wifi_config:
+            # Only boards wired to an external cyw43 module build this
+            import cyw43
+            cyw43.CYW43(**wifi_config)
 
         self._if = network.WLAN(network.STA_IF)
         self._if.active(True)
@@ -48,7 +63,7 @@ class EzWiFi:
 
     def on(self, handler_name, handler=None):
         if handler_name not in self._events.keys():
-            raise ValueError(f"Invalid event: \"{handler_name}\"")
+            raise ValueError(f'Invalid event: "{handler_name}"')
 
         def _on(handler):
             self._events[handler_name] = handler
@@ -111,13 +126,16 @@ class EzWiFi:
 
     def _secrets(self):
         try:
-            from secrets import WIFI_SSID, WIFI_PASSWORD
+            from secrets import WIFI_PASSWORD, WIFI_SSID
             if not WIFI_SSID:
                 raise ValueError("secrets.py: WIFI_SSID is empty!")
             return WIFI_SSID, WIFI_PASSWORD
-        except ImportError:
-            raise ImportError("secrets.py: missing or invalid!")
+        except ImportError as e:
+            raise ImportError("secrets.py: missing or invalid!") from e
 
 
-def connect(**kwargs):
-    return asyncio.get_event_loop().run_until_complete(EzWiFi(**kwargs).connect(retries=kwargs.get("retries", 10)))
+def connect(*args, **kwargs):
+    ssid, password = None, None
+    if len(args) == 2:
+        ssid, password = args
+    return asyncio.get_event_loop().run_until_complete(EzWiFi(**kwargs).connect(ssid, password, retries=kwargs.get("retries", 10)))
